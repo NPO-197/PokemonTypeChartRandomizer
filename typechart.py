@@ -10,7 +10,7 @@ import HexEdit as HE
 window = Tk()
 window.title('Type Chart Randomizer')
 
-window_leftside = PanedWindow(orient=VERTICAL)
+window_leftside = PanedWindow(orient=VERTICAL,height=400)
 window_sliders = PanedWindow()
 window_rightside = PanedWindow(orient=VERTICAL)
 window_MatchupButtonPane = PanedWindow()
@@ -20,7 +20,7 @@ window_filebuttons = PanedWindow()
 def scrollfunction(event):
     canvas_ChartCanvas.configure(scrollregion=canvas_ChartCanvas.bbox("all"),width=550,height=375)
     canvas_ChartCanvas.yview_scroll(int(-1*(event.delta/120)), "units")
-frame_myFrame = Frame(window_rightside,relief=GROOVE,width=50,height=100,bd=1)
+frame_myFrame = Frame(window_rightside,relief=GROOVE,width=50,height=200,bd=1)
 canvas_ChartCanvas = Canvas(frame_myFrame)
 frame_ChartPane = Frame(canvas_ChartCanvas)
 myscrollbar=Scrollbar(frame_myFrame,orient="vertical",command=canvas_ChartCanvas.yview)
@@ -135,12 +135,12 @@ def UpdateChart(chart):
             ChartButtons[i][j].NewMatchup(chart[i][j])
 
 def test():
+    TypeMatchups=[]
     for i in range(17):
-        matchuprow = []
+        TypeMatchups.append([])
         for j in range(17):
-            matchuprow.append(ChartButtons[i][j].matchup)
-        print(matchuprow)
-
+            TypeMatchups[i].append(ChartButtons[i][j].matchup)
+    return TypeMatchups
 
 button_100 = MatchupButton(window_MatchupButtonPane, text = '1×',matchup = 0)
 button_200 = MatchupButton(window_MatchupButtonPane, text = '2×',bg = 'green',fg='white',matchup =1)
@@ -181,7 +181,7 @@ def UpdateState():
 check_Active = Checkbutton(window_MatchupButtonPane,text = "Edit",variable = var_activatesliders,command = UpdateState)
 check_Active.grid(column =4,row = 1)
 
-
+label_SliderInfo = Label(window_sliders,justify = LEFT,text='Adjust the sliders to set the min/max number of times \neach machup occurs in a given row/collumn. \nPress \"Example=>\" to see an example chart on the side.')
 
 slider_1times = Slider(window_sliders, width = 300, height = 40, min_val = 0, max_val = 17, init_lis = [0,17], show_value = True)
 slider_2times = Slider(window_sliders, width = 300, height = 40, min_val = 0, max_val = 17, init_lis = [2,7], show_value = True)
@@ -190,11 +190,13 @@ slider_0times = Slider(window_sliders, width = 300, height = 40, min_val = 0, ma
 sliders = [slider_1times,slider_2times,slider_5times,slider_0times]
 sliderlabels = []
 sliderlabeltext = ['1-times','2-times','0.5-times','0-times']
-#check_Active.grid(row = 0,column = 0)
+
+label_SliderInfo.grid(row = 0,column = 1)
 for i in range(4):
     sliderlabels.append(Label(window_sliders,text=sliderlabeltext[i]))
     sliderlabels[i].grid(row=i+1,column=0)
     sliders[i].grid(row=i+1,column=1)
+
 
 
 def generate():
@@ -204,49 +206,78 @@ def generate():
         mins.append(int(slider.getValues()[0]))
         maxs.append(int(slider.getValues()[1]))
     cm = [[0,1,2,3],mins,maxs]
-    chart = RandGls(cm,17)
-    UpdateChart(chart)
+    try:
+        chart = RandGls(cm,17)
+        UpdateChart(chart)
+        lable_Error.configure(text='')
+    except ValueError as error:
+        if str(error).split('\n')[0] == 'summax < n':
+            errorstring = 'Maximum number of matchups is less then 17\nPlease adjust sliders so that a matchup chart is possible'
+        else:
+            errorstring = 'Minimum number of matchups is greater then 17\nPlease adjust sliders so that a matchup chart is possible'
+        lable_Error.configure(text=errorstring)
 
-button_generate=Button(window_sliders,text='Generate Example=>',command = generate)
+
+button_generate=Button(window_sliders,text='Example=>',command = generate)
+lable_Error = Label(window_sliders,text='')
+
 
 button_generate.grid(row = 10,column =1)
-
+lable_Error.grid(row =11,column=1)
 
 def openrom():
     filename = filedialog.askopenfilename(initialdir = './', title = 'Open ROM', filetypes=(('GameBoyColor file','*.gbc'),('all files','*.*')))
-    if filename != '':
-        var_FileName.set(filename)
-        filenameshort = filename.split('/')[-1]
-        label_RomInfo.configure(text = 'ROM Info: '+filenameshort)
-        button_RandomizeROM.configure(state = NORMAL)
+    if filename == '':
+        button_SaveExample.configure(state=DISABLED)
+        button_RandomizeROM.configure(state=DISABLED)
+        return
+    var_FileName.set(filename)
+    filenameshort = filename.split('/')[-1]
+    label_RomInfo.configure(text = 'ROM Info: '+filenameshort)
+    button_RandomizeROM.configure(state = NORMAL)
+    button_SaveExample.configure(state = NORMAL)
 
 
 def randomize():
     filename = filedialog.asksaveasfilename(initialdir = './',title = 'Save As', filetypes = (('GameBoyColor file','*.gbc'),('all files','*.*')))
-    if filename !='':
-        if filename.split('.')[-1] != 'gbc':
-            filename = filename+'.gbc'
-        var_OutputFileName.set(filename)
-        answer = simpledialog.askstring("Input", "Enter a Seed, (Leave Blank for random seed)",parent=window)
-        if answer !='':
-            seed = answer
-        else:
-            seed = random.randrange(2147483647)
-        mins = []
-        maxs = []
-        for slider in sliders:
-            mins.append(int(slider.getValues()[0]))
-            maxs.append(int(slider.getValues()[1]))
-        HE.Rando(var_FileName.get(),var_OutputFileName.get(),mins,maxs,seed)
+    if filename =='':
+        return
+    if filename.split('.')[-1] != 'gbc':
+        filename = filename+'.gbc'
+    var_OutputFileName.set(filename)
+    answer = simpledialog.askstring("Input", "Enter a Seed, (Leave Blank for random seed)",parent=window)
+    if answer !='':
+        seed = answer
+    else:
+        seed = random.randrange(2147483647)
+    mins = []
+    maxs = []
+    for slider in sliders:
+        mins.append(int(slider.getValues()[0]))
+        maxs.append(int(slider.getValues()[1]))
+    HE.Rando(var_FileName.get(),var_OutputFileName.get(),mins,maxs,seed)
+
+def SaveExample():
+    filename = filedialog.asksaveasfilename(initialdir = './',title = 'Save As', filetypes = (('GameBoyColor file','*.gbc'),('all files','*.*')))
+    if filename =='':
+        return
+    if filename.split('.')[-1] != 'gbc':
+        filename = filename+'.gbc'
+    var_OutputFileName.set(filename)
+    seed = 'Custom Type Chart'
+    TypeChart = test()
+    HE.SaveChart(var_FileName.get(),var_OutputFileName.get(),TypeChart,seed)
+
 
 button_OpenROM=Button(window_filebuttons,text='OpenROM',command = openrom)
 label_RomInfo = Label(window_filebuttons,text='ROM Info:')
 button_RandomizeROM=Button(window_filebuttons,text='Randomize ROM',command = randomize,state = DISABLED)
+button_SaveExample=Button(window_filebuttons,text='Save ROM Using Example Chart',command = SaveExample,state = DISABLED)
 
 button_OpenROM.grid(row = 0,column = 0)
 label_RomInfo.grid(row = 0,column = 1)
 button_RandomizeROM .grid(row = 1,column = 0)
-
+button_SaveExample.grid(row=2,column=0)
 
 
 

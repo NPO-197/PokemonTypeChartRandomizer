@@ -6,7 +6,22 @@ import GeneralLatinSquare as GL
 import SpoilerLog as Sl
     #SpoilerLog is used to generate tje spoiler log.
 
+def SaveChart(inputfile,outputfile,TypeChart,seed):
+    mins =[]
+    maxs = []
+    matchups = ['0A','14','05','00']
+    RandomTypeChartMatrix = []
+    for i in range(len(TypeChart)):
+        RandomTypeChartMatrix.append([])
+        for j in range(len(TypeChart[0])):
+            RandomTypeChartMatrix[i].append(matchups[TypeChart[i][j]])
+    HexEdit(inputfile,outputfile,mins,maxs,RandomTypeChartMatrix,seed)
+
 def Rando(inputfile,outputfile,mins,maxs,seed):
+    NewTypeChartHex = []
+    HexEdit(inputfile,outputfile,mins,maxs,RandomTypeChartMatrix,seed)
+
+def HexEdit(inputfile,outputfile,mins,maxs,RandomTypeChartMatrix,seed):
 
     shutil.copy(inputfile,outputfile)
 
@@ -38,13 +53,15 @@ def Rando(inputfile,outputfile,mins,maxs,seed):
 
     # 17 types in pokemon crystal
     n = 17
-    # constraint matrix based on given mins and maxs
-    cm = [['0A','14','05','00'],mins,maxs]
-    # we generate a random type chart as a general latin square (so it's balanced)
-    RandomTypeChartMatrix = GL.RandGls(cm,n)
+    if mins != []:
+        # constraint matrix based on given mins and maxs
+        cm = [['0A','14','05','00'],mins,maxs]
+        # we generate a random type chart as a general latin square (so it's balanced)
+        RandomTypeChartMatrix = GL.RandGls(cm,n)
     RandomTypeChart = GL._to_text(RandomTypeChartMatrix)
     #print(RandomTypeChart)
     NewTypeChartHex = bytearray.fromhex(RandomTypeChart)
+
     Sl.Spoiler(outputfile[:-4]+'log.txt',RandomTypeChartMatrix,seed)
     #print(outputfile)
 
