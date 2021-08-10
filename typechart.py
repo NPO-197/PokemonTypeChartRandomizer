@@ -150,6 +150,7 @@ button_000 = MatchupButton(window_MatchupButtonPane, text = '0×',bg='black',fg=
 button_test = Button(window_MatchupButtonPane, text = 'test',command = test)
 
 
+label_TableKey = Label(window_MatchupButtonPane,text='Attack⬇ / Defense➡',font=[FONT,11,'bold'])
 
 
 for i in range(17):
@@ -168,7 +169,7 @@ for i in range(len(Buttons)):
     Buttons[i].grid(column=i,row=1)
 
 #button_test.grid(column = 4,row =1)
-
+label_TableKey.grid(row = 1,column=6)
 
 
 def UpdateState():

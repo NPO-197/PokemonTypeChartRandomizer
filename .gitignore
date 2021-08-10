@@ -1,0 +1,10 @@
+/_pycache_
+/dist
+*.gbc
+*.pyc
+*.pyd
+*.dll
+*.exe
+*.tcl
+*.msg
+*.enc
