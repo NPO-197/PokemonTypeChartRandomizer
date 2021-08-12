@@ -6,6 +6,7 @@ import GeneralLatinSquare as GL
 import SpoilerLog as Sl
     #SpoilerLog is used to generate tje spoiler log.
 
+    #Used to generate a ROM with a custom type chart
 def SaveChart(inputfile,outputfile,TypeChart,seed):
     mins =[]
     maxs = []
@@ -17,12 +18,16 @@ def SaveChart(inputfile,outputfile,TypeChart,seed):
             RandomTypeChartMatrix[i].append(matchups[TypeChart[i][j]])
     HexEdit(inputfile,outputfile,mins,maxs,RandomTypeChartMatrix,seed)
 
+    #Used to generate a ROM with a random type chart based on the settings
+    #could probably re-write this whole .py file to be a bit more streamlined....
 def Rando(inputfile,outputfile,mins,maxs,seed):
     NewTypeChartHex = []
     HexEdit(inputfile,outputfile,mins,maxs,RandomTypeChartMatrix,seed)
 
+
 def HexEdit(inputfile,outputfile,mins,maxs,RandomTypeChartMatrix,seed):
 
+    #first make a copy of the input file so we can edit it without destroying the original file
     shutil.copy(inputfile,outputfile)
 
     f = open(outputfile, "r+b")
@@ -59,11 +64,10 @@ def HexEdit(inputfile,outputfile,mins,maxs,RandomTypeChartMatrix,seed):
         # we generate a random type chart as a general latin square (so it's balanced)
         RandomTypeChartMatrix = GL.RandGls(cm,n)
     RandomTypeChart = GL._to_text(RandomTypeChartMatrix)
-    #print(RandomTypeChart)
+
     NewTypeChartHex = bytearray.fromhex(RandomTypeChart)
 
     Sl.Spoiler(outputfile[:-4]+'log.txt',RandomTypeChartMatrix,seed)
-    #print(outputfile)
 
     # First seek to the location of the 'typematchup function' used by the game's code
     mm.seek(TypeMatchupOffsetVanilla)
@@ -82,7 +86,9 @@ def HexEdit(inputfile,outputfile,mins,maxs,RandomTypeChartMatrix,seed):
             print(test1)
             print(test2)
             print('Error Couldn\'t detect ROM')
+            #will need to move error handling to when we LOAD the file instead of when we try to randomize it
         else:
+            #will need to write a full function for this to make supporting other ROMS more simpler
             print('SpeedChoice ROM detected')
             mm.seek(TypeMatchupOffsetSpeedChoice)
             mm.write(NewTypeMatchupHexSpeedChoice)
@@ -91,6 +97,7 @@ def HexEdit(inputfile,outputfile,mins,maxs,RandomTypeChartMatrix,seed):
             mm.write(TypeChartCodeSpeedChoice)
             mm.flush()
     else:
+        #same function as for speed choice just slightly different offsets and hexcode
         print('Vanilla ROM detected')
         mm.seek(TypeMatchupOffsetVanilla)
         mm.write(NewTypeMatchupHexVanilla)

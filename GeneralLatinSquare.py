@@ -1,3 +1,7 @@
+"""
+Python code to generate a General Latin Square, implementation by NPO-119
+Mathematics of method to generate General Latin Square by Keith Ziss
+"""
 from random import choice, shuffle
 from copy import deepcopy
 import sys

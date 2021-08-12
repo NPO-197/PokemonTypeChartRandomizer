@@ -1,3 +1,10 @@
+"""
+tkSliderWidget originaly made by MenxLi
+Modified by NPO-119 to include discrete option, active option, and redraw function 
+
+"""
+
+
 from tkinter import *
 from tkinter.ttk import *
 

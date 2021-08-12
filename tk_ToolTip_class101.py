@@ -1,3 +1,13 @@
+""" tk_ToolTip_class101.py
+gives a Tkinter widget a tooltip as the mouse is above the widget
+tested with Python27 and Python34  by  vegaseat  09sep2014
+www.daniweb.com/programming/software-development/code/484591/a-tooltip-class-for-tkinter
+
+Modified to include a delay time by Victor Zaccardo, 25mar16
+
+Modified to include changetext() by NPO-119
+""" 
+
 try:
     # for Python2
     import Tkinter as tk

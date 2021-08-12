@@ -1,3 +1,8 @@
+"""
+typechart.py GUI for pokemon type chart randomizer made by NPO-119
+
+"""
+
 from tkinter import *
 import random
 from tk_ToolTip_class101 import CreateToolTip
