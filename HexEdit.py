@@ -21,7 +21,7 @@ def SaveChart(inputfile,outputfile,TypeChart,seed):
     #Used to generate a ROM with a random type chart based on the settings
     #could probably re-write this whole .py file to be a bit more streamlined....
 def Rando(inputfile,outputfile,mins,maxs,seed):
-    NewTypeChartHex = []
+    RandomTypeChartMatrix = []
     HexEdit(inputfile,outputfile,mins,maxs,RandomTypeChartMatrix,seed)
 
 

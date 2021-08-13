@@ -74,7 +74,7 @@ ChartLabels = []
 TypeLables = []
 TypeLables2 = []
 MatchupsText = ['1','2','½','0']
-MatchupsBgColors = ['white','green','red','black']
+MatchupsBgColors = ['white','#26a426','#fa2424','black']
 MatchupsFgColors = ['Black','Black','Black','White']
 TypeNames = ['Normal','Fighting','Flying','Poison','Ground','Rock','Bug','Ghost','Steel','Fire','Water','Grass','Electric','Psychic','Ice','Dragon','Dark']
 AbrevTypeNames =['NOR','FIG','FLY','POI','GRO','ROC','BUG','GHO','STE','FIR','WAT','GRA','ELE','PSY','ICE','DRA','DAR']
@@ -148,8 +148,8 @@ def test():
     return TypeMatchups
 
 button_100 = MatchupButton(window_MatchupButtonPane, text = '1×',matchup = 0)
-button_200 = MatchupButton(window_MatchupButtonPane, text = '2×',bg = 'green',fg='white',matchup =1)
-button_050 = MatchupButton(window_MatchupButtonPane, text = '½×', padx =3,bg = 'red',fg='white',matchup =2)
+button_200 = MatchupButton(window_MatchupButtonPane, text = '2×',bg = '#26a426',fg='white',matchup =1)
+button_050 = MatchupButton(window_MatchupButtonPane, text = '½×', padx =3,bg = '#fa2424',fg='white',matchup =2)
 button_000 = MatchupButton(window_MatchupButtonPane, text = '0×',bg='black',fg='white',matchup =3)
 
 button_test = Button(window_MatchupButtonPane, text = 'test',command = test)
