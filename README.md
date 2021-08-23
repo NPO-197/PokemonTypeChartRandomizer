@@ -6,7 +6,7 @@ Currently supports:
 
 ## How to use
 
-IMPORTANT If you would like to randomize the Pokemon or moves / key items, please use those randomizers first THEN use this tool on the randomized ROMs
+-IMPORTANT If you would like to randomize the Pokemon or moves / key items, please use those randomizers first THEN use this tool on the randomized ROMs
 -First run the '.exe' file from the dist.zip folder, Download from 'Releases'.
 -Click 'OpenROM' and select a clean or randomized 'Pokemon Crystal (UE) (V1.0)' or 'speedchoice-v7.1' gbc file.
 -Then select the settings you want for generating a random Type Chart using the Sliders.
