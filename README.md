@@ -25,5 +25,5 @@ If you would like to make a custom type chart click on the 'edit' check mark box
 Then click on 'Save ROM using Example Chart' to generate a ROM with a custom type chart.
 
 ## How to make Suggestions and feedback / Report Issues
-If you have any issues please reach out to me on discord or report an issue to the github.
-LINKS to contact me:
+If you have any issues / suggestions please reach out to me on discord or report an issue to the github.
+Discord username: NPO#5612
