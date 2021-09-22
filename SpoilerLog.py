@@ -1,19 +1,15 @@
 #function to generate a spoiler log for the randomizer
 def Spoiler(FileName,RandomTypeChart,seed):
-    TypeNames = ['Normal','Fighting','Flying','Poison','Ground','Rock','Bug','Ghost','Steel','Fire','Water','Grass','Electric','Psychic','Ice','Dragon','Dark']
+    TypeNames = ['Bug', 'Dark', 'Dragon', 'Electric', 'Fighting', 'Fire', 'Flying', 'Ghost', 'Grass', 'Ground', 'Ice', 'Normal', 'Poison', 'Psychic', 'Rock', 'Steel', 'Water']
+    TypeIndex = [6, 16, 15, 12, 1, 9, 2, 7, 11, 4, 14, 0, 3, 13, 5, 8, 10]
     f = open(FileName,'w+')
-    f.write("RNG Seed:"+str(seed)+'\r')
-    f.write("Defending >>\r")
     #Abreviate each type's name so it dosen't take up too much space
-    f.write("Attacking VV\t|NOR|FIG|FLY|POI|GRO|ROC|BUG|GHO|STE|FIR|WAT|GRA|ELE|PSY|ICE|DRA|DAR|\r\n")
+    f.write("Seed:"+str(seed)+",BUG,DAR,DRA,ELE,FIG,FIR,FLY,GHO,GRA,GRO,ICE,NOR,POI,PSY,ROC,STE,WAT\n")
     for i in range(17):
-        f.write(TypeNames[i]+"\t")
-        #if the typename is too short add an extra 'tab' character so it all lines up
-        if len(TypeNames[i]) < 8:
-                f.write("\t")
+        f.write(TypeNames[i])
         #the type effectiveness is stored in hexadecimal as 10*(effectiveness) so we convert to an int and divide by 10
         for j in range(17):
-            f.write('|'+str(int(RandomTypeChart[i][j],16)/10))
-        f.write("|\r")
+            f.write(','+str(int(RandomTypeChart[TypeIndex[i]][TypeIndex[j]],16)/10))
+        f.write("\n")
 
     f.close()

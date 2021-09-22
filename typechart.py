@@ -49,7 +49,7 @@ window_leftside.pack(side = 'left')
 
 FONTSIZE = 7
 FONT = 'Helvetica'
-DEFAULTCHART = [[0,0,0,0,0,2,0,3,2,0,0,0,0,0,0,0,0],
+DEFAULTCHARTU = [[0,0,0,0,0,2,0,3,2,0,0,0,0,0,0,0,0],
                 [1,0,2,2,0,1,2,3,1,0,0,0,0,2,1,0,1],
                 [0,1,0,0,0,2,1,0,2,0,0,1,2,0,0,0,0],
                 [0,0,0,2,2,2,0,2,3,0,0,1,0,0,0,0,0],
@@ -66,6 +66,24 @@ DEFAULTCHART = [[0,0,0,0,0,2,0,3,2,0,0,0,0,0,0,0,0],
                 [0,0,1,0,1,0,0,0,2,2,2,1,0,0,2,1,0],
                 [0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,1,0],
                 [0,2,0,0,0,0,0,1,2,0,0,0,0,1,0,0,2]]
+DEFAULTCHART = [[0, 1, 0, 0, 2, 2, 2, 2, 1, 0, 0, 0, 2, 1, 0, 2, 0],
+                [0, 2, 0, 0, 2, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 2, 0],
+                [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0],
+                [0, 0, 2, 2, 0, 0, 1, 0, 2, 3, 0, 0, 0, 0, 0, 0, 1],
+                [2, 1, 0, 0, 0, 0, 2, 3, 0, 0, 1, 1, 2, 2, 1, 1, 0],
+                [1, 0, 2, 0, 0, 2, 0, 0, 1, 0, 1, 0, 0, 0, 2, 1, 2],
+                [1, 0, 0, 2, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 2, 2, 0],
+                [0, 2, 0, 0, 0, 0, 0, 1, 0, 0, 0, 3, 0, 1, 0, 2, 0],
+                [2, 0, 2, 0, 0, 2, 2, 0, 2, 1, 0, 0, 2, 0, 1, 2, 1],
+                [2, 0, 0, 1, 0, 1, 3, 0, 2, 0, 0, 0, 1, 0, 1, 1, 0],
+                [0, 0, 1, 0, 0, 2, 1, 0, 1, 1, 2, 0, 0, 0, 0, 2, 2],
+                [0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 2, 2, 0],
+                [0, 0, 0, 0, 0, 0, 0, 2, 1, 2, 0, 0, 2, 0, 2, 3, 0],
+                [0, 3, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 2, 0, 2, 0],
+                [1, 0, 0, 0, 2, 1, 1, 0, 0, 2, 1, 0, 0, 0, 0, 2, 0],
+                [0, 0, 0, 2, 0, 2, 0, 0, 0, 0, 1, 0, 0, 0, 1, 2, 2],
+                [0, 0, 2, 0, 0, 1, 0, 0, 2, 1, 0, 0, 0, 0, 1, 0, 2]]
+
 
 
 Buttons = []
@@ -76,9 +94,17 @@ TypeLables2 = []
 MatchupsText = ['1','2','½','0']
 MatchupsBgColors = ['white','#26a426','#fa2424','black']
 MatchupsFgColors = ['Black','Black','Black','White']
-TypeNames = ['Normal','Fighting','Flying','Poison','Ground','Rock','Bug','Ghost','Steel','Fire','Water','Grass','Electric','Psychic','Ice','Dragon','Dark']
-AbrevTypeNames =['NOR','FIG','FLY','POI','GRO','ROC','BUG','GHO','STE','FIR','WAT','GRA','ELE','PSY','ICE','DRA','DAR']
-TypeColors = ['#A8A77A','#C22E28','#A98FF3','#A33EA1','#E2BF65','#B6A136','#A6B91A','#735797','#B7B7CE','#EE8130','#6390F0','#7AC74C','#F7D02C','#F95587','#96D9D6','#6F35FC','#705746']
+
+TypeNamesU =     ['Normal','Fighting','Flying','Poison','Ground','Rock','Bug','Ghost','Steel','Fire','Water','Grass','Electric','Psychic','Ice','Dragon','Dark']
+AbrevTypeNamesU =['NOR','FIG','FLY','POI','GRO','ROC','BUG','GHO','STE','FIR','WAT','GRA','ELE','PSY','ICE','DRA','DAR']
+TypeColorsU =    ['#A8A77A','#C22E28','#A98FF3','#A33EA1','#E2BF65','#B6A136','#A6B91A','#735797','#B7B7CE','#EE8130','#6390F0','#7AC74C','#F7D02C','#F95587','#96D9D6','#6F35FC','#705746']
+
+TypeNames = ['Bug', 'Dark', 'Dragon', 'Electric', 'Fighting', 'Fire', 'Flying', 'Ghost', 'Grass', 'Ground', 'Ice', 'Normal', 'Poison', 'Psychic', 'Rock', 'Steel', 'Water']
+AbrevTypeNames= ['BUG', 'DAR', 'DRA', 'ELE', 'FIG', 'FIR', 'FLY', 'GHO', 'GRA', 'GRO', 'ICE', 'NOR', 'POI', 'PSY', 'ROC', 'STE', 'WAT']
+TypeColors= ['#A6B91A', '#705746', '#6F35FC', '#F7D02C', '#C22E28', '#EE8130', '#A98FF3', '#735797', '#7AC74C', '#E2BF65', '#96D9D6', '#A8A77A', '#A33EA1', '#F95587', '#B6A136', '#B7B7CE', '#6390F0']
+TypeIndex = [6, 16, 15, 12, 1, 9, 2, 7, 11, 4, 14, 0, 3, 13, 5, 8, 10]
+
+
 var_buttoncolor = StringVar(window,value='red')
 var_matchup = IntVar(window,value = 0)
 var_activatesliders = IntVar(window,value = 0)
@@ -137,14 +163,13 @@ def ChartSelect(button):
 def UpdateChart(chart):
     for i in range(17):
         for j in range(17):
-            ChartButtons[i][j].NewMatchup(chart[i][j])
+            ChartButtons[i][j].NewMatchup(chart[TypeIndex[i]][TypeIndex[j]])
 
 def test():
-    TypeMatchups=[]
+    TypeMatchups=[[0 for x in range(17)] for i in range(17)]
     for i in range(17):
-        TypeMatchups.append([])
         for j in range(17):
-            TypeMatchups[i].append(ChartButtons[i][j].matchup)
+            TypeMatchups[TypeIndex[i]][TypeIndex[j]]=ChartButtons[i][j].matchup
     return TypeMatchups
 
 button_100 = MatchupButton(window_MatchupButtonPane, text = '1×',matchup = 0)

@@ -67,7 +67,7 @@ def HexEdit(inputfile,outputfile,mins,maxs,RandomTypeChartMatrix,seed):
 
     NewTypeChartHex = bytearray.fromhex(RandomTypeChart)
 
-    Sl.Spoiler(outputfile[:-4]+'log.txt',RandomTypeChartMatrix,seed)
+    Sl.Spoiler(outputfile[:-4]+'log.csv',RandomTypeChartMatrix,seed)
 
     # First seek to the location of the 'typematchup function' used by the game's code
     mm.seek(TypeMatchupOffsetVanilla)
