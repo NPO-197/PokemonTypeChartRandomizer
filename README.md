@@ -25,7 +25,7 @@ If you would like a completely random type chart (very unbalanced) have each sli
 
 Click on 'Example=>' to generate an example of a possible chart to get a sense of what kind of chart you might get with the current settings.
 
-Click on 'Randomize ROM' and specify the seed (or leave blank for a random one) and the name of the new .gbc file to generate a randomized Pokemon crystal ROM and spoiler log .csv file
+Click on 'Randomize ROM' and specify the seed (or leave blank for a random one) and the name of the new ROM file to generate a randomized Pokemon ROM and spoiler log .csv file
 
 If you would like to make a custom type chart click on the 'edit' check mark box and use the four buttons on top to modify the current type chart however you wish.
 
