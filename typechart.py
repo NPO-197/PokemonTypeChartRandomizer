@@ -11,6 +11,8 @@ from GeneralLatinSquare import RandGls
 from tkinter import filedialog
 from tkinter import simpledialog
 import HexEdit as HE
+import DetectROM
+import HexEditGen3
 
 window = Tk()
 window.title('Type Chart Randomizer')
@@ -109,6 +111,7 @@ var_buttoncolor = StringVar(window,value='red')
 var_matchup = IntVar(window,value = 0)
 var_activatesliders = IntVar(window,value = 0)
 var_FileName = StringVar(window,value ='')
+var_ROMType = IntVar(window,value=0)
 var_OutputFileName = StringVar(window,value='')
 var_Seed = IntVar(window,value = 0)
 class MatchupButton(Button):
@@ -257,24 +260,40 @@ button_generate.grid(row = 10,column =1)
 lable_Error.grid(row =11,column=1)
 
 def openrom():
-    filename = filedialog.askopenfilename(initialdir = './', title = 'Open ROM', filetypes=(('GameBoyColor file','*.gbc'),('all files','*.*')))
+    filename = filedialog.askopenfilename(initialdir = './', title = 'Open ROM', filetypes=(('gbc/gba file','*.gb*'),('all files','*.*')))
     if filename == '':
         button_SaveExample.configure(state=DISABLED)
         button_RandomizeROM.configure(state=DISABLED)
+        var_FileName.set('')
+        return
+    Detect = DetectROM.TestROM(filename)
+    var_ROMType.set(Detect[1])
+    if Detect[1] == 0:
+        button_SaveExample.configure(state=DISABLED)
+        button_RandomizeROM.configure(state=DISABLED)
+        label_RomInfo.configure(text = 'ROM Info:'+Detect[0])
+        var_FileName.set('')
         return
     var_FileName.set(filename)
     filenameshort = filename.split('/')[-1]
-    label_RomInfo.configure(text = 'ROM Info: '+filenameshort)
+    label_RomInfo.configure(text = 'ROM Info:'+Detect[0])
     button_RandomizeROM.configure(state = NORMAL)
     button_SaveExample.configure(state = NORMAL)
 
 
 def randomize():
-    filename = filedialog.asksaveasfilename(initialdir = './',title = 'Save As', filetypes = (('GameBoyColor file','*.gbc'),('all files','*.*')))
-    if filename =='':
-        return
-    if filename.split('.')[-1] != 'gbc':
-        filename = filename+'.gbc'
+    if var_FileName.get().split('.')[-1]=='gba':
+        filename = filedialog.asksaveasfilename(initialdir = './',title = 'Save As', filetypes = (('GameBoyAdvance file','*.gba'),('all files','*.*')))
+        if filename =='':
+            return
+        if filename[-4:] !='.gba':
+            filename = filename+'.gba'
+    else:
+        filename = filedialog.asksaveasfilename(initialdir = './',title = 'Save As', filetypes = (('GameBoyColor file','*.gbc'),('all files','*.*')))
+        if filename =='':
+            return
+        if filename[-4:] !='.gbc':
+            filename = filename+'.gbc'
     var_OutputFileName.set(filename)
     answer = simpledialog.askstring("Input", "Enter a Seed, (Leave Blank for random seed)",parent=window)
     if answer !='':
@@ -286,18 +305,31 @@ def randomize():
     for slider in sliders:
         mins.append(int(slider.getValues()[0]))
         maxs.append(int(slider.getValues()[1]))
-    HE.Rando(var_FileName.get(),var_OutputFileName.get(),mins,maxs,seed)
+    if var_ROMType.get() <= 2:
+        HE.Rando(var_FileName.get(),var_OutputFileName.get(),mins,maxs,seed)
+    if var_ROMType.get() == 3:
+        HexEditGen3.Rando(var_FileName.get(),var_OutputFileName.get(),mins,maxs,seed)
 
 def SaveExample():
-    filename = filedialog.asksaveasfilename(initialdir = './',title = 'Save As', filetypes = (('GameBoyColor file','*.gbc'),('all files','*.*')))
-    if filename =='':
-        return
-    if filename.split('.')[-1] != 'gbc':
-        filename = filename+'.gbc'
+    if var_FileName.get().split('.')[-1]=='gba':
+        filename = filedialog.asksaveasfilename(initialdir = './',title = 'Save As', filetypes = (('GameBoyAdvance file','*.gba'),('all files','*.*')))
+        if filename =='':
+            return
+        if filename[-4:] !='.gba':
+            filename = filename+'.gba'
+    else:
+        filename = filedialog.asksaveasfilename(initialdir = './',title = 'Save As', filetypes = (('GameBoyColor file','*.gbc'),('all files','*.*')))
+        if filename =='':
+            return
+        if filename[-4:] !='.gbc':
+            filename = filename+'.gbc'
     var_OutputFileName.set(filename)
     seed = 'Custom Type Chart'
     TypeChart = test()
-    HE.SaveChart(var_FileName.get(),var_OutputFileName.get(),TypeChart,seed)
+    if var_ROMType.get()<=2:
+        HE.SaveChart(var_FileName.get(),var_OutputFileName.get(),TypeChart,seed)
+    if var_ROMType.get()==3:
+        HexEditGen3.SaveChart(var_FileName.get(),var_OutputFileName.get(),TypeChart,seed)
 
 
 button_OpenROM=Button(window_filebuttons,text='OpenROM',command = openrom)
@@ -306,19 +338,8 @@ button_RandomizeROM=Button(window_filebuttons,text='Randomize ROM',command = ran
 button_SaveExample=Button(window_filebuttons,text='Save ROM Using Example Chart',command = SaveExample,state = DISABLED)
 
 button_OpenROM.grid(row = 0,column = 0)
-label_RomInfo.grid(row = 0,column = 1)
-button_RandomizeROM .grid(row = 1,column = 0)
-button_SaveExample.grid(row=2,column=0)
-
-
-
-
-
-
-
-
-
-
-
+label_RomInfo.grid(row = 1,column = 0)
+button_RandomizeROM .grid(row = 2,column = 0)
+button_SaveExample.grid(row=3,column=0)
 
 window.mainloop()
