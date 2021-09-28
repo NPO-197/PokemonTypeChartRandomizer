@@ -1,8 +1,9 @@
-# PokemonTypeChartRandomizerCrystal
-A tool to Randomize the Type Chart Matchup Table of a Pokémon Crystal ROM
+# PokemonTypeChartRandomizer
+A tool to Randomize the Type Chart Matchup Table of a Pokémon Crystal or Pokemon Emerald ROM
 Currently supports:
 - Pokemon - Crystal Version (UE) (V1.0) [C][!].gbc `sha1: F4CD194BDEE0D04CA4EAC29E09B8E4E9D818C133`
 - crystal-speedchoice-v7.2.gbc `sha1: 19AB11096EB2BA6BF9A8360093B2DDAE3E7ABBAB`
+- pokeemerald-speedchoice-1.2.1.gba `sha1: C65E8F3DC990484CE522A979CDBCF9732A2F5AAB`
 
 # Type Chart Tracker
 I would suggest using Demki's tracker found here: https://demki.github.io/poketypechart/
@@ -16,7 +17,7 @@ IMPORTANT If you would like to randomize the Pokemon or moves / key items, pleas
 
 First run the '.exe' file from the dist.zip folder, Download from 'Releases'.
 
-Click 'OpenROM' and select a clean or randomized 'Pokemon Crystal (UE) (V1.0)' or 'speedchoice-v7.1' gbc file.
+Click 'OpenROM' and select a clean or randomized ROM (Make sure the base ROM is supported by this randomizer!)
 
 Then select the settings you want for generating a random Type Chart using the Sliders.
 
