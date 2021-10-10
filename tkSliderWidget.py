@@ -1,6 +1,6 @@
 """
 tkSliderWidget originaly made by MenxLi
-Modified by NPO-119 to include discrete option, active option, and redraw function 
+Modified by NPO-197 to include discrete option, active option, and redraw function
 
 """
 
@@ -125,8 +125,10 @@ class Slider(Frame):
     def redraw(self):
         for bar in self.bars:
             ids = bar["Ids"]
-            pos = bar["Pos"]
             val = bar["Value"]
+            if val > self.max_val:
+                val = self.max_val
+            pos = (val-self.min_val)/(self.max_val-self.min_val)
             for id in ids:
                 self.canv.delete(id)
             bar["Ids"] = self.__addBar(pos)

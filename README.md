@@ -4,6 +4,7 @@ Currently supports:
 - Pokemon - Crystal Version (UE) (V1.0) [C][!].gbc `sha1: F4CD194BDEE0D04CA4EAC29E09B8E4E9D818C133`
 - crystal-speedchoice-v7.2.gbc `sha1: 19AB11096EB2BA6BF9A8360093B2DDAE3E7ABBAB`
 - pokeemerald-speedchoice-1.2.1.gba `sha1: C65E8F3DC990484CE522A979CDBCF9732A2F5AAB`
+- pokeemerald-ex-speedchoice-0.3.0.gba `sha1: A57527512AA3856C43808BED9E4B2F1FF6FB2FE6`
 
 # Type Chart Tracker
 I would suggest using Demki's tracker found here: https://demki.github.io/poketypechart/
@@ -18,6 +19,8 @@ IMPORTANT If you would like to randomize the Pokemon or moves / key items, pleas
 First run the '.exe' file from the dist.zip folder, Download from 'Releases'.
 
 Click 'OpenROM' and select a clean or randomized ROM (Make sure the base ROM is supported by this randomizer!)
+
+Make sure the correct Gen is selected for the game you are randomizing, Gen6+ for EX, Gen2+ for everything else, Gen1 is currently not supported.
 
 Then select the settings you want for generating a random Type Chart using the Sliders.
 

@@ -57,7 +57,7 @@ def HexEdit(inputfile,outputfile,mins,maxs,RandomTypeChartMatrix,seed):
         cm = [[0,1,2,3],mins,maxs]
         # we generate a random type chart as a general latin square (so it's balanced)
         RandomTypeChartMatrix = GL.RandGls(cm,n)
-    Sl.Spoiler(outputfile[:-4]+'log.csv',RandomTypeChartMatrix,seed)
+    Sl.Spoiler(2,outputfile[:-4]+'log.csv',RandomTypeChartMatrix,seed)
 
     matchups = ['0A','14','05','00']
     RandomTypeChartMatrixHex = []

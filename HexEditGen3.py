@@ -6,16 +6,9 @@ import GeneralLatinSquare as GL
 import SpoilerLog
     #SpoilerLog is used to generate the spoiler log.
 
-inputfile = "pokeemerald-speedchoice-1.2.1.gba"
-outputfile ="test.gba"
-TC = []
-mins =[0,2,2,0]
-maxs =[17,7,5,1]
-seed = 0
 
-
-    #Used to generate a ROM with a custom type chart for gen 3 ROMS
-def SaveChart(inputfile,outputfile,TypeChart,seed):
+    #Converts a Type Chart from a grid format to a list, for gen 3 type order.
+def TypeChartToList(TypeChart):
     matchups = [0x0A,0x14,0x05,0x00]
     TypeChartList = []
     Imunities = []
@@ -29,26 +22,35 @@ def SaveChart(inputfile,outputfile,TypeChart,seed):
                 AtkType+=1
             if DefType>8:
                 DefType+=1
-            #Put Imunities after the Forsight breakpoint
+            #Put Imunities at the end (after Forsight breakpoint)
             if Matchup == 0x00:
                 Imunities.extend([AtkType,DefType,Matchup])
                 continue
-            #Toss Neutral Matchups
+            #Ignore Neutral Matchups
             if Matchup == 0x0A:
                 continue
+            #Put NotVerry / Super Effective into the list
             TypeChartList.extend([AtkType,DefType,Matchup])
+
     TypeChartList.extend([0xFE,0xFE,0x00])#Foresight break point
     TypeChartList.extend(Imunities)
     TypeChartList.extend([0xFF,0xFF,0x00])#End of matchups list
-    HexEdit(inputfile,outputfile,TypeChartList)
-    SpoilerLog.Spoiler(outputfile[:-4]+'log.csv',TypeChart,seed)
+    return(TypeChartList)
+
 #Used to generate a ROM with a random type chart based on the settings
-def Rando(inputfile,outputfile,mins,maxs,seed):
+def Rando(ROMType,inputfile,outputfile,mins,maxs,seed):
     # constraint matrix based on given mins and maxs
     cm = [[0,1,2,3],mins,maxs]
     # we generate a random type chart as a general latin square (so it's balanced)
     TypeChart = GL.RandGls(cm,17) #Only 17 types in gen 3
     SaveChart(inputfile,outputfile,TypeChart,seed)
+
+#Used to generate a ROM with a custom type chart for gen 3 ROMS
+def SaveChart(ROMType,inputfile,outputfile,TypeChart,seed):
+    TypeChartList = TypeChartToList(TypeChart)
+    HexEdit(inputfile,outputfile,TypeChartList)
+    SpoilerLog.Spoiler(3,outputfile[:-4]+'log.csv',TypeChart,seed)
+
 
 def HexEdit(inputfile,outputfile,NewTypeChartList):
         #first make a copy of the input file so we can edit it without destroying the original file

@@ -6,7 +6,7 @@ www.daniweb.com/programming/software-development/code/484591/a-tooltip-class-for
 Modified to include a delay time by Victor Zaccardo, 25mar16
 
 Modified to include changetext() by NPO-119
-""" 
+"""
 
 try:
     # for Python2
@@ -29,6 +29,9 @@ class CreateToolTip(object):
         self.widget.bind("<ButtonPress>", self.leave)
         self.id = None
         self.tw = None
+
+    def destroy(self):
+        self.widget.destroy()
 
     def changetext(self,text):
         self.text = text
