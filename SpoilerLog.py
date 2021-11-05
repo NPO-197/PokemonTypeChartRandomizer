@@ -1,6 +1,6 @@
 #function to generate a spoiler log for the randomizer
-def Spoiler(Gen,FileName,RandomTypeChart,seed):
-    if Gen>=6:
+def Spoiler(FileName,RandomTypeChart,seed,NumberOfTypes):
+    if NumberOfTypes==18:
         spoilergen6(FileName,RandomTypeChart,seed)
         return
     TypeNames = ['Bug', 'Dark', 'Dragon', 'Electric', 'Fighting', 'Fire', 'Flying', 'Ghost', 'Grass', 'Ground', 'Ice', 'Normal', 'Poison', 'Psychic', 'Rock', 'Steel', 'Water']
@@ -21,6 +21,7 @@ def Spoiler(Gen,FileName,RandomTypeChart,seed):
         f.write("\n")
 
     f.close()
+
 
 def spoilergen6(FileName,RandomTypeChart,seed):
     TypeNames = ['Bug', 'Dark', 'Dragon', 'Electric', 'Fairy', 'Fighting', 'Fire', 'Flying', 'Ghost', 'Grass', 'Ground', 'Ice', 'Normal', 'Poison', 'Psychic', 'Rock', 'Steel', 'Water']

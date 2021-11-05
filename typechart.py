@@ -1,5 +1,5 @@
 """
-typechart.py GUI for pokemon type chart randomizer made by NPO-119
+typechart.py GUI for pokemon type chart randomizer made by NPO-197
 
 """
 
@@ -10,9 +10,11 @@ from tkSliderWidget import Slider
 from GeneralLatinSquare import RandGls
 from tkinter import filedialog
 from tkinter import simpledialog
-import HexEdit as HE
-import DetectROM
 import HexEditGen3,HexEditGen3EX
+import mmap
+import os
+import PokemonROMInfo
+import HexEdit0
 
 window = Tk()
 window.title('Type Chart Randomizer')
@@ -359,6 +361,34 @@ lable_Error = Label(window_sliders,text='')
 button_generate.grid(row = 10,column =1)
 lable_Error.grid(row =11,column=1)
 
+#Used to detect the rom type
+def TestROM(inputfile):
+    f = open(inputfile,"r+b")
+    size = os.path.getsize(inputfile)
+    # memory-map the file, size 0 means whole file
+    mm = mmap.mmap(f.fileno(),0)
+        #DefinedRoms is an array containg info on each ROM that is currently supported
+    for RomInfo in PokemonROMInfo.DefinedRoms:
+        #Check the filesizes match
+        if RomInfo.filesize != size:
+            continue
+        #check that the data is what we expect it to be in the loacations we expect
+        #Note we dont compare the entire rom, just a few specific offsets,
+        #We cannot use a checksum or md5 hash, since those would be random if the rom is allready randomized.
+        checkflag = True
+        for datacheck in RomInfo.checkdata:
+            offset = datacheck[0]
+            data = datacheck[1]
+            mm.seek(offset)
+            if mm.read(len(data)) != data:
+                checkflag = False
+        if checkflag:
+            return RomInfo
+
+    return PokemonROMInfo.NoRomInfo
+
+
+
 def openrom():
     filename = filedialog.askopenfilename(initialdir = './', title = 'Open ROM', filetypes=(('gbc/gba file','*.gb*'),('all files','*.*')))
     if filename == '':
@@ -366,24 +396,26 @@ def openrom():
         button_RandomizeROM.configure(state=DISABLED)
         var_FileName.set('')
         return
-    Detect = DetectROM.TestROM(filename)
-    var_ROMType.set(Detect[1])
-    if Detect[1] == 0:
+    Detect = TestROM(filename)
+    var_ROMType.set(Detect.ROMID.value)
+    if Detect.ROMID == PokemonROMInfo.ROMID.Error:
         button_SaveExample.configure(state=DISABLED)
         button_RandomizeROM.configure(state=DISABLED)
-        label_RomInfo.configure(text = 'ROM Info:'+Detect[0])
+        label_RomInfo.configure(text = 'ROM Info: Couldn\'t detect ROM')
         var_FileName.set('')
         return
-    if var_Gen.get()!=1 and (Detect[1]in [1,2,3]):
+    if var_Gen.get()!=1 and (Detect.NumberOfTypes == 17):
+        #Gen==1 means 17 types
         var_Gen.set(1)
         SwapGens()
-    if var_Gen.get()!=2 and (Detect[1]==4):
+    if var_Gen.get()!=2 and (Detect.NumberOfTypes == 18):
+        #Gen==2 means 18 types
         var_Gen.set(2)
         SwapGens()
 
     var_FileName.set(filename)
     filenameshort = filename.split('/')[-1]
-    label_RomInfo.configure(text = 'ROM Info:'+Detect[0])
+    label_RomInfo.configure(text = f'ROM Info:{Detect.ROMID.name}')
     button_RandomizeROM.configure(state = NORMAL)
     button_SaveExample.configure(state = NORMAL)
 
@@ -407,17 +439,20 @@ def randomize():
         seed = answer
     else:
         seed = random.randrange(2147483647)
+    random.seed(seed)
     mins = []
     maxs = []
     for slider in sliders:
         mins.append(int(slider.getValues()[0]))
         maxs.append(int(slider.getValues()[1]))
-    if var_ROMType.get() <= 2:
-        HE.Rando(var_FileName.get(),var_OutputFileName.get(),mins,maxs,seed)
-    if var_ROMType.get() == 3:
-        HexEditGen3.Rando(var_FileName.get(),var_OutputFileName.get(),mins,maxs,seed)
-    if var_ROMType.get() == 4:
-        HexEditGen3EX.Rando(var_FileName.get(),var_OutputFileName.get(),mins,maxs,seed)
+    RomInfo = TestROM(var_FileName.get())
+    HexEdit0.Rando(var_FileName.get(),var_OutputFileName.get(),mins,maxs,RomInfo,seed)
+    #if var_ROMType.get() <= 2:
+        #HE.Rando(var_FileName.get(),var_OutputFileName.get(),mins,maxs,seed)
+    #if var_ROMType.get() == 3:
+        #HexEditGen3.Rando(var_FileName.get(),var_OutputFileName.get(),mins,maxs,seed)
+    #if var_ROMType.get() == 4:
+        #HexEditGen3EX.Rando(var_FileName.get(),var_OutputFileName.get(),mins,maxs,seed)
 
 
 def SaveExample():
@@ -436,12 +471,14 @@ def SaveExample():
     var_OutputFileName.set(filename)
     seed = 'Custom Type Chart'
     TypeChart = test()
-    if var_ROMType.get()<=2:
-        HE.SaveChart(var_FileName.get(),var_OutputFileName.get(),TypeChart,seed)
-    if var_ROMType.get()==3:
-        HexEditGen3.SaveChart(var_FileName.get(),var_OutputFileName.get(),TypeChart,seed)
-    if var_ROMType.get()==4:
-        HexEditGen3EX.SaveChart(var_FileName.get(),var_OutputFileName.get(),TypeChart,seed)
+    RomInfo = TestROM(var_FileName.get())
+    HexEdit0.SaveChart(var_FileName.get(),var_OutputFileName.get(),TypeChart,RomInfo,seed)
+    #if var_ROMType.get()<=2:
+        #HE.SaveChart(var_FileName.get(),var_OutputFileName.get(),TypeChart,seed)
+    #if var_ROMType.get()==3:
+        #HexEditGen3.SaveChart(var_FileName.get(),var_OutputFileName.get(),TypeChart,seed)
+    #if var_ROMType.get()==4:
+        #HexEditGen3EX.SaveChart(var_FileName.get(),var_OutputFileName.get(),TypeChart,seed)
 
 button_OpenROM=Button(window_filebuttons,text='OpenROM',command = openrom)
 label_RomInfo = Label(window_filebuttons,text='ROM Info:')

@@ -1,5 +1,6 @@
 /_pycache_
 /dist
+/TestingROMs
 *.gbc
 *.pyc
 *.pyd
@@ -11,3 +12,6 @@
 *.zip
 *.gba
 *.csv
+*.gb
+*.sav
+*.sn*
