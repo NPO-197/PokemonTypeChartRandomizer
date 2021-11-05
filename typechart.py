@@ -10,11 +10,10 @@ from tkSliderWidget import Slider
 from GeneralLatinSquare import RandGls
 from tkinter import filedialog
 from tkinter import simpledialog
-import HexEditGen3,HexEditGen3EX
 import mmap
-import os
+from os import path as ospath
 import PokemonROMInfo
-import HexEdit0
+import HexEdit
 
 window = Tk()
 window.title('Type Chart Randomizer')
@@ -364,7 +363,7 @@ lable_Error.grid(row =11,column=1)
 #Used to detect the rom type
 def TestROM(inputfile):
     f = open(inputfile,"r+b")
-    size = os.path.getsize(inputfile)
+    size = ospath.getsize(inputfile)
     # memory-map the file, size 0 means whole file
     mm = mmap.mmap(f.fileno(),0)
         #DefinedRoms is an array containg info on each ROM that is currently supported
@@ -446,7 +445,7 @@ def randomize():
         mins.append(int(slider.getValues()[0]))
         maxs.append(int(slider.getValues()[1]))
     RomInfo = TestROM(var_FileName.get())
-    HexEdit0.Rando(var_FileName.get(),var_OutputFileName.get(),mins,maxs,RomInfo,seed)
+    HexEdit.Rando(var_FileName.get(),var_OutputFileName.get(),mins,maxs,RomInfo,seed)
     #if var_ROMType.get() <= 2:
         #HE.Rando(var_FileName.get(),var_OutputFileName.get(),mins,maxs,seed)
     #if var_ROMType.get() == 3:
@@ -472,13 +471,7 @@ def SaveExample():
     seed = 'Custom Type Chart'
     TypeChart = test()
     RomInfo = TestROM(var_FileName.get())
-    HexEdit0.SaveChart(var_FileName.get(),var_OutputFileName.get(),TypeChart,RomInfo,seed)
-    #if var_ROMType.get()<=2:
-        #HE.SaveChart(var_FileName.get(),var_OutputFileName.get(),TypeChart,seed)
-    #if var_ROMType.get()==3:
-        #HexEditGen3.SaveChart(var_FileName.get(),var_OutputFileName.get(),TypeChart,seed)
-    #if var_ROMType.get()==4:
-        #HexEditGen3EX.SaveChart(var_FileName.get(),var_OutputFileName.get(),TypeChart,seed)
+    HexEdit.SaveChart(var_FileName.get(),var_OutputFileName.get(),TypeChart,RomInfo,seed)
 
 button_OpenROM=Button(window_filebuttons,text='OpenROM',command = openrom)
 label_RomInfo = Label(window_filebuttons,text='ROM Info:')

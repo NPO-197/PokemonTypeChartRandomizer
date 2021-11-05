@@ -5,7 +5,7 @@ www.daniweb.com/programming/software-development/code/484591/a-tooltip-class-for
 
 Modified to include a delay time by Victor Zaccardo, 25mar16
 
-Modified to include changetext() by NPO-119
+Modified to include changetext() by NPO-197
 """
 
 try:

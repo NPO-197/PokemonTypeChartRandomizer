@@ -1,10 +1,8 @@
 """
-Python code to generate a General Latin Square, implementation by NPO-119
-Mathematics of method to generate General Latin Square by Keith Ziss
+Python code to generate a General Latin Square, implementation by NPO-197
 """
 from random import choice, shuffle
 from copy import deepcopy
-import sys
 
 #function to generate a random latin square (might want to replace with the jacobson-matthews method)
 def rls(n):

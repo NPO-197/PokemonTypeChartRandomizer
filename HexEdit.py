@@ -1,4 +1,9 @@
-import mmap, shutil
+"""
+Python Code to Hex edit varios pokemon ROMs to allow for randomized Type Charts by NPO-197
+"""
+
+import mmap
+from shutil import copy
     #mmap is used to memory-map the .gbc file to help handel editing
     #shutil is used to copy files
 import GeneralLatinSquare
@@ -11,7 +16,7 @@ import PokemonROMInfo
 def ToMatrixFormatGen2(TypeChart):
     #Matrix format, AttackingType is the Row, DefendingType is the column, Matchups form the 2d matrix
     #Gen2 ROMs are modifyed to accept this smaller format instead of the default ListFormat,
-    #If I can figure out a way to make the ListFormat fit then I can avoid needing to modify the ASM...
+    #There simply isn't enough free space at the end of the ROM bank to fit list format
     TypeChartData = []
     matchups = [0x0A,0x14,0x05,0x00]
     for row in TypeChart:
@@ -119,7 +124,7 @@ def SaveChart(inputfile,outputfile,TypeChart,RomInfo,seed):
 def HexEdit(inputfile,outputfile,NewTypeChartData,RomInfo,seed):
 
     #first make a copy of the input file so we can edit it without destroying the original file
-    shutil.copy(inputfile,outputfile)
+    copy(inputfile,outputfile)
     f = open(outputfile, "r+b")
     # memory-map the file, size 0 means whole file
     mm = mmap.mmap(f.fileno(),0)

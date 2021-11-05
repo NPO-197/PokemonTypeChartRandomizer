@@ -1,18 +1,9 @@
+"""
+ROM information file made by NPO-197
+This file contains all rom sepecific info for each pokemon game needed to detect and randomize each rom
+File size, offests, ect.
+"""
 from enum import Enum
-#This file contains all rom sepecific info for each pokemon game needed to detect and randomize each rom
-#File size, offests, ect.
-
-#TBD Use an enum for this instead of an int...
-#DETECTED ROMS : NUMBER
-#VANILLA CRYSTAL : 1
-#CRYSTAL SPPEDCHOICE: 2
-#EMERALD SPEEDCHOICE: 3
-#EMERALD EX: 4
-
-#Emerald ~= 0x1000000 bytes
-#Crystal ~=  0x200000 bytes
-#Red     ~=  0x100000 bytes
-
 
 class ROMID(Enum):
     Error = 0
@@ -20,6 +11,7 @@ class ROMID(Enum):
     CrystalSpeedChoice = 2
     EmeraldSpeedChoice = 3
     EmeraldEXSpeedChoice = 4
+    VanillaEmerald = 5
 
 class TCformat(Enum):
     #2D array Effectivenes format, a custom format that the Gen 2 roms are modifyed to accept.
@@ -28,6 +20,8 @@ class TCformat(Enum):
     ListFormatGen3 = 2
     #2D array 2byte Effectivenes, +Inverse Chart  (Emerald EX)
     MatrixUQ_4_12Gen6 = 3
+
+DefinedRoms = []
 
 class RomInfo:
     def __init__(self,ROMID,filesize,chartdataoffset,typechartformat,checkdata,newdata,NumberOfTypes=17,):
@@ -45,8 +39,9 @@ class RomInfo:
         self.newdata = newdata
         # Number of different types in this ROM
         self.NumberOfTypes = NumberOfTypes
+        DefinedRoms.append(self)
 
-NoRomInfo = RomInfo(ROMID.Error,0,0,0,[],[])
+#NoRomInfo = RomInfo(ROMID.Error,0,0,0,[],[])
 
 VanillaCrystalInfo = RomInfo(ROMID.VanillaCrystal,0x200000,0x034BB1,TCformat.MatrixFormatGen2,
     checkdata =[
@@ -110,6 +105,38 @@ EmeraldSpeedChoiceInfo = RomInfo(ROMID.EmeraldSpeedChoice,0x1000000,0xAF0000,TCf
     ]
 )
 
+VanillaEmeraldInfo = RomInfo(ROMID.VanillaEmerald,0x1000000,0xAF0000,TCformat.ListFormatGen3,
+    checkdata = [
+    #Pointers to the original type chart data
+        [0x047134,bytearray.fromhex('E8 AC 31 08')],   #TypeCalc Pointer 1
+        [0x047274,bytearray.fromhex('E8 AC 31 08')],   #TypeCalc Pointer 2
+        [0x047348,bytearray.fromhex('E8 AC 31 08')],   #AI trainer switch out
+        [0x0476AC,bytearray.fromhex('E8 AC 31 08')],   #Used in levetate/wonderguard? 1
+        [0x0477B0,bytearray.fromhex('E8 AC 31 08')],   #Used in levetate/wonderguard? 2
+        [0x0478B0,bytearray.fromhex('E8 AC 31 08')],   #"Good" trainer AI
+        [0x04C694,bytearray.fromhex('E8 AC 31 08')],   #??? (Something in battle_script_command)
+        [0x052D18,bytearray.fromhex('E8 AC 31 08')],   #Used in conversion 2
+        [0x063A8C,bytearray.fromhex('E8 AC 31 08')],   #AI trainer switch in?
+        [0x1900B8,bytearray.fromhex('E8 AC 31 08')],   #Battle Dome
+        #Unused Section of ROM
+        [0xAF0000,bytearray(873)] #We need at most 873 empty bytes
+    ],
+    newdata =[
+    #There are 10 pointers used by various functions that point to the Old Type Chart
+    #We want to change them to point to the new type chart at 0x08af0000
+        [0x047134,bytearray.fromhex('00 00 AF 08')],   #TypeCalc Pointer 1
+        [0x047274,bytearray.fromhex('00 00 AF 08')],   #TypeCalc Pointer 2
+        [0x047348,bytearray.fromhex('00 00 AF 08')],   #AI trainer switch out
+        [0x0476AC,bytearray.fromhex('00 00 AF 08')],   #Used in levetate/wonderguard? 1
+        [0x0477B0,bytearray.fromhex('00 00 AF 08')],   #Used in levetate/wonderguard? 2
+        [0x0478B0,bytearray.fromhex('00 00 AF 08')],   #"Good" trainer AI
+        [0x04C694,bytearray.fromhex('00 00 AF 08')],   #??? (Something in battle_script_command)
+        [0x052D18,bytearray.fromhex('00 00 AF 08')],   #Used in conversion 2
+        [0x063A8C,bytearray.fromhex('00 00 AF 08')],   #AI trainer switch in?
+        [0x1900B8,bytearray.fromhex('00 00 AF 08')],   #Battle Dome
+    ]
+)
+
 EmeraldEXSpeedChoiceInfo = RomInfo(ROMID.EmeraldEXSpeedChoice,0x2000000,0x37AFC6,TCformat.MatrixUQ_4_12Gen6,NumberOfTypes = 18,
     checkdata =[
         # EX was allready designed to make randomizing type chart simpler
@@ -157,9 +184,3 @@ EmeraldEXSpeedChoiceInfo = RomInfo(ROMID.EmeraldEXSpeedChoice,0x2000000,0x37AFC6
     ],
     newdata = [] #No need to change any pointers or any functions with this one :)
 )
-
-DefinedRoms =[
-    VanillaCrystalInfo,
-    CrystalSpeedChoiceInfo,
-    EmeraldSpeedChoiceInfo,
-    EmeraldEXSpeedChoiceInfo]

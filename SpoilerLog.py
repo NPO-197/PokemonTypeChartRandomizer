@@ -1,4 +1,7 @@
-#function to generate a spoiler log for the randomizer
+"""
+function to generate a spoiler log for the randomizer by NPO-197
+"""
+
 def Spoiler(FileName,RandomTypeChart,seed,NumberOfTypes):
     if NumberOfTypes==18:
         spoilergen6(FileName,RandomTypeChart,seed)
