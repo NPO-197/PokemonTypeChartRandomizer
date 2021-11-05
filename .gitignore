@@ -1,6 +1,7 @@
 /_pycache_
 /dist
 /TestingROMs
+/OldDist
 *.gbc
 *.pyc
 *.pyd
