@@ -3,6 +3,7 @@ A tool to Randomize the Type Chart Matchup Table of a Pokémon Crystal or Pokemo
 Currently supports:
 - Pokemon - Crystal Version (UE) (V1.0) [C][!].gbc `sha1: F4CD194BDEE0D04CA4EAC29E09B8E4E9D818C133`
 - crystal-speedchoice-v7.2.gbc `sha1: 19AB11096EB2BA6BF9A8360093B2DDAE3E7ABBAB`
+- pokeemerald.gba `sha1: f3ae088181bf583e55daf962a92bb46f4f1d07b7`
 - pokeemerald-speedchoice-1.2.1.gba `sha1: C65E8F3DC990484CE522A979CDBCF9732A2F5AAB`
 - pokeemerald-ex-speedchoice-0.3.0.gba `sha1: A57527512AA3856C43808BED9E4B2F1FF6FB2FE6`
 
