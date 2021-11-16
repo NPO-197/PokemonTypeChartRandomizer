@@ -91,6 +91,26 @@ def ToMatrixUQ_4_12Gen6(TypeChart):
 
     #Used to generate a ROM with a random type chart based on the settings
 
+def ToListFormatGen1(TypeChart):
+    # List Format, Attacking,Defending,Matchup list of every non-neutral matchup
+    #Gen 1 types, only 15 of them, no need to "sort" the list
+    matchups = [0x0A,0x14,0x05,0x00]
+    #Convert from type chart index to gen 1 index "BIRD type lol"
+    Gen1Index = [0x00,0x01,0x02,0x03,0x04,0x05,0x07,0x08,0x14,0x15,0x16,0x17,0x18,0x19,0x1A]
+    TypeChartList = []
+    for i in range(len(TypeChart)):
+        for j in range(len(TypeChart[0])):
+            AtkType = Gen1Index[i]
+            DefType = Gen1Index[j]
+            Matchup = matchups[TypeChart[i][j]]
+            #Ignore neutral matchups
+            if Matchup == 0x0A:
+                continue
+            #Put non-neutral matchups into the list
+            TypeChartList.extend([AtkType,DefType,Matchup])
+    #Add 0xFF to the end of the list
+    TypeChartList.append(0xFF)
+    return bytearray(TypeChartList)
 
 def Rando(inputfile,outputfile,mins,maxs,RomInfo,seed):
 
@@ -114,6 +134,8 @@ def SaveChart(inputfile,outputfile,TypeChart,RomInfo,seed):
         NewTypeChartData = ToMatrixUQ_4_12Gen6(TypeChart) #Calc Chart data for EX ROM Format
         InverseData = ToMatrixUQ_4_12Gen6(InverseTypeChart(TypeChart)) #Calc Inverse Chart data for EX ROM Format
         NewTypeChartData.extend(InverseData) #We need to add the inverse chart data imeadiatly afterwards
+    elif tfc == PokemonROMInfo.TCformat.ListFormatGen1:
+        NewTypeChartData = ToListFormatGen1(TypeChart)
     else:
         print('Error unkown TCformat')
 
@@ -140,4 +162,16 @@ def HexEdit(inputfile,outputfile,NewTypeChartData,RomInfo,seed):
     mm.flush()
 
     #Don't forget to close the file when you are done!
+    mm.close()
+
+def OptionalEdits(outputfile,Data):
+    f = open(outputfile,"r+b")
+    mm = mmap.mmap(f.fileno(),0)
+    # write in any optional data we need into the ROM
+    for datapoint in Data:
+        offset = datapoint[0]
+        data = datapoint[1]
+        mm.seek(offset)
+        mm.write(data)
+    mm.flush()
     mm.close()

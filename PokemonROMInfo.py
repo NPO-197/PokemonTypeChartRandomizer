@@ -12,19 +12,22 @@ class ROMID(Enum):
     EmeraldSpeedChoice = 3
     EmeraldEXSpeedChoice = 4
     VanillaEmerald = 5
-
+    VanillaRedBlue = 6
+    RedSpeedChoice = 7
 class TCformat(Enum):
     #2D array Effectivenes format, a custom format that the Gen 2 roms are modifyed to accept.
     MatrixFormatGen2 = 1
-    #1D array Attack/Defend/Effecivenes
+    #1D array Attack/Defend/Effecivenes, forsight break
     ListFormatGen3 = 2
     #2D array 2byte Effectivenes, +Inverse Chart  (Emerald EX)
     MatrixUQ_4_12Gen6 = 3
+    #1D array Attack/Defend/Effecivenes
+    ListFormatGen1 = 4
 
 DefinedRoms = []
 
 class RomInfo:
-    def __init__(self,ROMID,filesize,chartdataoffset,typechartformat,checkdata,newdata,NumberOfTypes=17,):
+    def __init__(self,ROMID,filesize,chartdataoffset,typechartformat,checkdata,newdata,NumberOfTypes=17,optionaldata=[]):
         # ROMID is just a way to enumirate all of the different supported rom types
         self.ROMID = ROMID
         # File size of the Rom
@@ -39,9 +42,11 @@ class RomInfo:
         self.newdata = newdata
         # Number of different types in this ROM
         self.NumberOfTypes = NumberOfTypes
+        # Optional Data that we may want to write into memory (currently only used for gen one Dragon breath)
+        self.optionaldata = optionaldata
         DefinedRoms.append(self)
 
-#NoRomInfo = RomInfo(ROMID.Error,0,0,0,[],[])
+NoRomInfo = RomInfo(ROMID.Error,0,0,0,[],[])
 
 VanillaCrystalInfo = RomInfo(ROMID.VanillaCrystal,0x200000,0x034BB1,TCformat.MatrixFormatGen2,
     checkdata =[
@@ -183,4 +188,55 @@ EmeraldEXSpeedChoiceInfo = RomInfo(ROMID.EmeraldEXSpeedChoice,0x2000000,0x37AFC6
         0x00,0x10,0x00,0x08,0x00,0x10,0x00,0x20,0x00,0x10,0x00,0x10,0x00,0x10,0x00,0x10,0x00,0x20,0x00,0x10,0x00,0x20,0x00,0x10,0x00,0x10,0x00,0x10,0x00,0x10,0x00,0x10,0x00,0x08,0x00,0x08,0x00,0x10])]
     ],
     newdata = [] #No need to change any pointers or any functions with this one :)
+)
+
+VanillaRedBlueInfo = RomInfo(ROMID.VanillaRedBlue,0x100000,0x03FBE0, TCformat.ListFormatGen1, NumberOfTypes = 15,
+    checkdata = [
+        #Pointers to the original type chart data
+        [0x03E3F8,bytearray.fromhex('74 64')],  #AdjustDamageForMoveType
+        [0x03E459,bytearray.fromhex('74 64')],  #AIGetTypeEffectiveness
+        #Dual-type damage misinformation glitch
+        [0x03E411, bytearray.fromhex('E680')],      # and a,0x80
+        [0x03E417, bytearray.fromhex('80EA5BD0')],  # add b;ld (wDamageMultipliers),a
+        [0x03FBC8,bytearray(700)] #We need space for both the patch and new tpechart
+    ],
+    newdata =[
+        #Pointers to the original type chart data
+        #We want to change them to point to the new type chart at 0F:7BE0
+        [0x03E3F8,bytearray.fromhex('E0 7B')],   #AdjustDamageForMoveType
+        [0x03E459,bytearray.fromhex('E0 7B')],   #AIGetTypeEffectiveness
+        #Fix the Dual-type damage misinformation glitch
+        [0x03E411, bytearray.fromhex('E67F')],      # and a,0x7F
+        [0x03E417, bytearray.fromhex('00CDC87B')],   #nop:call 7BC8 (our patch)
+        #Asm code patch
+        [0x03FBC8, bytearray.fromhex('4F78A720014F79B0FE1520020E0A79EA5BD0C9')]
+    ],
+    optionaldata =[
+        [0x381e6,bytearray.fromhex("52243C1AFF14")], #Change DragonRage into a 60bp,20pp, Dragon move w/ 30% chance of para
+        [0xB02F6,bytearray.fromhex("8391868D7F81918480938750")] #Change the name of "DRAGON RAGE" to "DRGN BREATH" (13 char limit, also i'm lazy)
+    ]
+)
+
+RedSpeedChoiceInfo = RomInfo(ROMID.RedSpeedChoice,0x100000,0xBA569, TCformat.ListFormatGen1, NumberOfTypes = 15,
+    checkdata = [
+        #The start of each funtion we need to move
+        [0x3e444,bytearray.fromhex("2110D02A474E21")], #AdjustDamageForMoveType
+        [0x3e4e8,bytearray.fromhex("21DACFF0F3A7FA")], #StatsGetEffectiveness
+        [0x3e53e,bytearray.fromhex("FABFCF572110D0")], #AIGetTypeEffectiveness
+        #CopiedFunctionSpace
+        [0xb8000,bytearray(339)], #Need space to copy the functions over
+        [0xba569,bytearray(676)] #Need space for our new typechart data
+    ],
+    newdata =[
+        #Write a far call to the copied functions new location
+        [0x3e444,bytearray.fromhex("062E210040C7C9")], #AdjustDamageForMoveType
+        [0x3e4e8,bytearray.fromhex("062E21B040C7C9")], #StatsGetEffectiveness
+        [0x3e53e,bytearray.fromhex("062E211041C7C9")], #AIGetTypeEffectiveness
+        #CopiedFunctions
+        [0xb8000,bytearray.fromhex("2110D02A474E21DACF2A575EFAC5CFEA06D1F0F3A7281221DACF2A474E2110D02A575EFABFCFEA06D1FA06D1B82805B92802181A21C0D03A666F444DCB38CB19097CEABFD07DEAC0D02152D0CBFEFA06D1472169652AFEFF2849B820417EBA2805BB28021838E5C523FA52D0E67F477EE09900CD4041AFE09621BFD02AE0973AE098CDEE343E0AE0990604CDF934F0972247F09877B020043CEA56D0C1E1232318B300C900000000000000000000000021DACFF0F3A7FAC5CF28062110D0FABFCF4F2A5E57060A2169652AFEFF2835B9202E7EBA2805BB280218252378FE0A200346181DAFE096E09778E0982AE099CDEE343E0AE0990604CDF934F0984718CA232318C650C900000000000000000000FABFCF572110D046234E3E10EA06D12169652AFEFFC8BA20092AB82809B928061801232318EC7EEA06D1C900000000004F78A720014F79B0FE1520020E0A79EA52D0C9")]
+    ],
+    optionaldata =[
+        [0x381e6,bytearray.fromhex("52243C1AFF14")], #Change DragonRage into a 60bp,20pp, Dragon move w/ 30% chance of para
+        [0xB02F6,bytearray.fromhex("8391868D7F81918480938750")] #Change the name of "DRAGON RAGE" to "DRGN BREATH" (13 char limit, also i'm lazy)
+    ]
 )

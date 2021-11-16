@@ -52,7 +52,24 @@ window_leftside.pack(side = 'left')
 
 FONTSIZE = 7
 FONT = 'Helvetica'
-DEFAULTCHARTU = [[0,0,0,0,0,2,0,3,2,0,0,0,0,0,0,0,0],
+
+DEFAULTCHART1 =     [[0,0,0,0,0,2,0,3,0,0,0,0,0,0,0],
+                     [1,0,2,2,0,1,2,3,0,0,0,0,2,1,0],
+                     [0,1,0,0,0,2,1,0,0,0,1,2,0,0,0],
+                     [0,0,0,2,2,2,1,2,0,0,1,0,0,0,0],
+                     [0,0,3,1,0,1,2,0,1,0,2,1,0,0,0],
+                     [0,2,1,0,2,0,1,0,1,0,0,0,0,1,0],
+                     [0,2,2,1,0,0,0,2,2,0,1,0,1,0,0],
+                     [3,0,0,0,0,0,0,1,0,0,0,0,3,0,0],
+                     [0,0,0,0,0,2,1,0,2,2,1,0,0,1,2],
+                     [0,0,0,0,1,1,0,0,1,2,2,0,0,0,2],
+                     [0,0,2,2,1,1,2,0,2,1,2,0,0,0,2],
+                     [0,0,1,0,3,0,0,0,0,1,2,2,0,0,2],
+                     [0,1,0,1,0,0,0,0,0,0,0,0,2,0,0],
+                     [0,0,1,0,1,0,0,0,0,2,1,0,0,2,1],
+                     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,1]]
+
+DEFAULTCHART2 = [[0,0,0,0,0,2,0,3,2,0,0,0,0,0,0,0,0],
                 [1,0,2,2,0,1,2,3,1,0,0,0,0,2,1,0,1],
                 [0,1,0,0,0,2,1,0,2,0,0,1,2,0,0,0,0],
                 [0,0,0,2,2,2,0,2,3,0,0,1,0,0,0,0,0],
@@ -69,7 +86,7 @@ DEFAULTCHARTU = [[0,0,0,0,0,2,0,3,2,0,0,0,0,0,0,0,0],
                 [0,0,1,0,1,0,0,0,2,2,2,1,0,0,2,1,0],
                 [0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,1,0],
                 [0,2,0,0,0,0,0,1,2,0,0,0,0,1,0,0,2]]
-DEFAULTCHART = [
+DEFAULTCHART6 = [
                 [0,0,0,0,0,2,0,3,2,0,0,0,0,0,0,0,0,0],
                 [1,0,2,2,0,1,2,3,1,0,0,0,0,2,1,0,1,2],
                 [0,1,0,0,0,2,1,0,2,0,0,1,2,0,0,0,0,0],
@@ -131,6 +148,8 @@ var_ROMType = IntVar(window,value=0)
 var_OutputFileName = StringVar(window,value='')
 var_Seed = IntVar(window,value = 0)
 var_NumTypes = IntVar(window,value=18)
+var_DrgnBreath = IntVar(window,value=0)
+
 class MatchupButton(Button):
 
     def __init__(self,master,matchup,text = '',height = 1,width =3,padx =4 ,pady =6,bd =4,bg = 'white',fg='black',highlightcolor='blue',name=''):
@@ -230,18 +249,20 @@ def InitChartPane():
     TypeNames = TypeNamesGen6
     AbrevTypeNames = AbrevTypeNamesGen6
     TypeIndex = TypeIndexGen6
+    DEFAULTCHART = DEFAULTCHART6
 
     if var_Gen.get()==0:
         TypeColors = TypeColorsGen1
         TypeNames = TypeNamesGen1
         AbrevTypeNames = AbrevTypeNamesGen1
         TypeIndex = TypeIndexGen1
+        DEFAULTCHART = DEFAULTCHART1
     if var_Gen.get()==1:
-        TypeColors = TypeColorsGen2
         TypeColors = TypeColorsGen2
         TypeNames = TypeNamesGen2
         AbrevTypeNames = AbrevTypeNamesGen2
         TypeIndex = TypeIndexGen2
+        DEFAULTCHART = DEFAULTCHART2
 
     for i in range(var_NumTypes.get()):
         AtkTypeName = TypeNames[i]
@@ -307,7 +328,7 @@ def SwapGens():
 
 check_Active = Checkbutton(window_MatchupButtonPane,text = "Edit",variable = var_activatesliders,command = UpdateState)
 check_Active.grid(column =4,row = 1)
-radio_Gen1 = Radiobutton(window_MatchupButtonPane,text = "Gen1",variable=var_Gen,value=0,command = SwapGens,state=DISABLED)
+radio_Gen1 = Radiobutton(window_MatchupButtonPane,text = "Gen1",variable=var_Gen,value=0,command = SwapGens)
 radio_Gen2p=Radiobutton(window_MatchupButtonPane,text="Gen2+",variable=var_Gen,value=1,command = SwapGens)
 radio_Gen6p=Radiobutton(window_MatchupButtonPane,text="Gen6+",variable=var_Gen,value=2,command=SwapGens)
 radio_Gen1.grid(column = 5, row =1)
@@ -389,7 +410,9 @@ def TestROM(inputfile):
 
 
 def openrom():
-    filename = filedialog.askopenfilename(initialdir = './', title = 'Open ROM', filetypes=(('gbc/gba file','*.gb*'),('all files','*.*')))
+    filename = filedialog.askopenfilename(initialdir = './', title = 'Open ROM', filetypes=(('gb/gbc/gba file','*.gb*'),('all files','*.*')))
+    check_DrgnBreath["state"] = "disabled"
+    var_DrgnBreath.set(0)
     if filename == '':
         button_SaveExample.configure(state=DISABLED)
         button_RandomizeROM.configure(state=DISABLED)
@@ -403,6 +426,12 @@ def openrom():
         label_RomInfo.configure(text = 'ROM Info: Couldn\'t detect ROM')
         var_FileName.set('')
         return
+    if Detect.NumberOfTypes == 15:
+        check_DrgnBreath["state"] = "normal"
+    if var_Gen.get()!=0 and (Detect.NumberOfTypes == 15):
+        #Gen==0 means 15 types
+        var_Gen.set(0)
+        SwapGens()
     if var_Gen.get()!=1 and (Detect.NumberOfTypes == 17):
         #Gen==1 means 17 types
         var_Gen.set(1)
@@ -420,18 +449,13 @@ def openrom():
 
 
 def randomize():
-    if var_FileName.get().split('.')[-1]=='gba':
-        filename = filedialog.asksaveasfilename(initialdir = './',title = 'Save As', filetypes = (('GameBoyAdvance file','*.gba'),('all files','*.*')))
-        if filename =='':
-            return
-        if filename[-4:] !='.gba':
-            filename = filename+'.gba'
-    else:
-        filename = filedialog.asksaveasfilename(initialdir = './',title = 'Save As', filetypes = (('GameBoyColor file','*.gbc'),('all files','*.*')))
-        if filename =='':
-            return
-        if filename[-4:] !='.gbc':
-            filename = filename+'.gbc'
+    filetype = var_FileName.get().split('.')[-1]
+    fname = {'gba':'GameBoyAdvance file','gbc':'GameBoyColor file','gb':'GameBoy file'}
+    filename = filedialog.asksaveasfilename(initialdir = './',title = 'Save As', filetypes = ((fname[filetype],'*.'+filetype),('all files','*.*')))
+    if filename =='':
+        return
+    if filename[-4:] !='.'+filetype:
+        filename = filename+'.'+filetype
     var_OutputFileName.set(filename)
     answer = simpledialog.askstring("Input", "Enter a Seed, (Leave Blank for random seed)",parent=window)
     if answer !='':
@@ -446,41 +470,37 @@ def randomize():
         maxs.append(int(slider.getValues()[1]))
     RomInfo = TestROM(var_FileName.get())
     HexEdit.Rando(var_FileName.get(),var_OutputFileName.get(),mins,maxs,RomInfo,seed)
-    #if var_ROMType.get() <= 2:
-        #HE.Rando(var_FileName.get(),var_OutputFileName.get(),mins,maxs,seed)
-    #if var_ROMType.get() == 3:
-        #HexEditGen3.Rando(var_FileName.get(),var_OutputFileName.get(),mins,maxs,seed)
-    #if var_ROMType.get() == 4:
-        #HexEditGen3EX.Rando(var_FileName.get(),var_OutputFileName.get(),mins,maxs,seed)
+    if var_DrgnBreath.get() != 0:
+        HexEdit.OptionalEdits(var_OutputFileName.get(),RomInfo.optionaldata)
 
 
 def SaveExample():
-    if var_FileName.get().split('.')[-1]=='gba':
-        filename = filedialog.asksaveasfilename(initialdir = './',title = 'Save As', filetypes = (('GameBoyAdvance file','*.gba'),('all files','*.*')))
-        if filename =='':
-            return
-        if filename[-4:] !='.gba':
-            filename = filename+'.gba'
-    else:
-        filename = filedialog.asksaveasfilename(initialdir = './',title = 'Save As', filetypes = (('GameBoyColor file','*.gbc'),('all files','*.*')))
-        if filename =='':
-            return
-        if filename[-4:] !='.gbc':
-            filename = filename+'.gbc'
+    filetype = var_FileName.get().split('.')[-1]
+    fname = {'gba':'GameBoyAdvance file','gbc':'GameBoyColor file','gb':'GameBoy file'}
+    filename = filedialog.asksaveasfilename(initialdir = './',title = 'Save As', filetypes = ((fname[filetype],'*.'+filetype),('all files','*.*')))
+    if filename =='':
+        return
+    if filename[-4:] !='.'+filetype:
+        filename = filename+'.'+filetype
     var_OutputFileName.set(filename)
     seed = 'Custom Type Chart'
     TypeChart = test()
     RomInfo = TestROM(var_FileName.get())
     HexEdit.SaveChart(var_FileName.get(),var_OutputFileName.get(),TypeChart,RomInfo,seed)
+    if var_DrgnBreath.get() != 0:
+        HexEdit.OptionalEdits(var_OutputFileName.get(),RomInfo.optionaldata)
 
 button_OpenROM=Button(window_filebuttons,text='OpenROM',command = openrom)
 label_RomInfo = Label(window_filebuttons,text='ROM Info:')
+check_DrgnBreath = Checkbutton(window_filebuttons,text = "Replace Dragon Rage?",variable = var_DrgnBreath,state=DISABLED)
+ttp_check_DrgnBreath=CreateToolTip(check_DrgnBreath,'In a Gen 1 ROM, replace the move Dragon Rage with Dragon Breath.')
 button_RandomizeROM=Button(window_filebuttons,text='Randomize ROM',command = randomize,state = DISABLED)
 button_SaveExample=Button(window_filebuttons,text='Save ROM Using Example Chart',command = SaveExample,state = DISABLED)
 
 button_OpenROM.grid(row = 0,column = 0)
 label_RomInfo.grid(row = 1,column = 0)
-button_RandomizeROM .grid(row = 2,column = 0)
-button_SaveExample.grid(row=3,column=0)
+check_DrgnBreath.grid(row = 2,column = 0)
+button_RandomizeROM .grid(row = 3,column = 0)
+button_SaveExample.grid(row=4,column=0)
 
 window.mainloop()
