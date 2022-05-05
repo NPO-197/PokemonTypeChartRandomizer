@@ -28,7 +28,7 @@ please use those randomizers first THEN use this tool on the randomized ROMs
 First run the '.exe' file from the dist.zip folder, Download from 'Releases'.  
 Click 'OpenROM' and select a clean or randomized ROM (Make sure the base ROM is supported by this randomizer!)  
 Make sure the correct Gen is selected for the game you are randomizing.  
-Use Gen6+ for EX, and Gen2+ for everything else. Gen1 is currently not supported.  
+Use Gen6+ for EX, and Gen2+ for Gen 2 / Gen 3. Gen 1 for Gen 1 games.  
 Then select the settings you want for generating a random Type Chart using the Sliders.  
 If you would like a completely random type chart (very unbalanced) have each slider set to it's minimum and maximum values.  
 Click on 'Example=>' to generate an example chart to get a feel for the settings.  
