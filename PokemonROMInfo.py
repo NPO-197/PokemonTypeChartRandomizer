@@ -14,6 +14,7 @@ class ROMID(Enum):
     VanillaEmerald = 5
     VanillaRedBlue = 6
     RedSpeedChoice = 7
+    Yellow = 8
 class TCformat(Enum):
     #2D array Effectivenes format, a custom format that the Gen 2 roms are modifyed to accept.
     MatrixFormatGen2 = 1
@@ -198,7 +199,7 @@ VanillaRedBlueInfo = RomInfo(ROMID.VanillaRedBlue,0x100000,0x03FBE0, TCformat.Li
         #Dual-type damage misinformation glitch
         [0x03E411, bytearray.fromhex('E680')],      # and a,0x80
         [0x03E417, bytearray.fromhex('80EA5BD0')],  # add b;ld (wDamageMultipliers),a
-        [0x03FBC8,bytearray(700)] #We need space for both the patch and new tpechart
+        [0x03FBC8,bytearray(700)] #We need space for both the patch and new typechart
     ],
     newdata =[
         #Pointers to the original type chart data
@@ -210,6 +211,7 @@ VanillaRedBlueInfo = RomInfo(ROMID.VanillaRedBlue,0x100000,0x03FBE0, TCformat.Li
         [0x03E417, bytearray.fromhex('00CDC87B')],   #nop:call 7BC8 (our patch)
         #Asm code patch
         [0x03FBC8, bytearray.fromhex('4F78A720014F79B0FE1520020E0A79EA5BD0C9')]
+
     ],
     optionaldata =[
         [0x381e6,bytearray.fromhex("52243C1AFF14")], #Change DragonRage into a 60bp,20pp, Dragon move w/ 30% chance of para
@@ -239,4 +241,33 @@ RedSpeedChoiceInfo = RomInfo(ROMID.RedSpeedChoice,0x100000,0xBA569, TCformat.Lis
         [0x381e6,bytearray.fromhex("52243C1AFF14")], #Change DragonRage into a 60bp,20pp, Dragon move w/ 30% chance of para
         [0xB02F6,bytearray.fromhex("8391868D7F81918480938750")] #Change the name of "DRAGON RAGE" to "DRGN BREATH" (13 char limit, also i'm lazy)
     ]
+)
+
+YellowInfo = RomInfo(ROMID.Yellow,0x100000,0x03FBE0, TCformat.ListFormatGen1, NumberOfTypes = 15,
+#Note yellow offsets are a bit different then red/blue
+    checkdata = [
+        #Pointers to the original type chart data
+        [0x03E56A,bytearray.fromhex('FA 65')],  #AdjustDamageForMoveType
+        [0x03E5CB,bytearray.fromhex('FA 65')],  #AIGetTypeEffectiveness
+        #Dual-type damage misinformation glitch
+        [0x03E583, bytearray.fromhex('E680')],      # and a,0x80
+        [0x03E589, bytearray.fromhex('80EA5AD0')],  # add b;ld (wDamageMultipliers),a
+        [0x03FBC8,bytearray(700)] #We need space for both the patch and new typechart
+    ],
+    newdata = [
+        #Pointers to the original type chart data
+        #We want to change them to point to the new type chart at 0F:7BE0
+        [0x03E56A,bytearray.fromhex('E0 7B')],   #AdjustDamageForMoveType
+        [0x03E5CB,bytearray.fromhex('E0 7B')],   #AIGetTypeEffectiveness
+        #Fix the Dual-type damage misinformation glitch
+        [0x03E583, bytearray.fromhex('E67F')],      # and a,0x7F
+        [0x03E589, bytearray.fromhex('00CDC87B')],   #nop:call 7BC8 (our patch)
+        #Asm code patch
+        [0x03FBC8, bytearray.fromhex('4F78A720014F79B0FE1520020E0A79EA5AD0C9')]
+    ],
+    optionaldata =[
+        [0x381E6,bytearray.fromhex("52243C1AFF14")], #Change DragonRage into a 60bp,20pp, Dragon move w/ 30% chance of para
+        [0xBC2F6,bytearray.fromhex("8391868D7F81918480938750")] #Change the name of "DRAGON RAGE" to "DRGN BREATH" (13 char limit, also i'm lazy)
+    ]
+
 )

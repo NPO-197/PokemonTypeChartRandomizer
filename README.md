@@ -1,14 +1,18 @@
 # PokemonTypeChartRandomizer
-A tool to Randomize the Type Chart Matchup Table of a Pokémon Crystal or Pokemon Emerald ROM
+A tool to randomize the type chart matchup table of various main series Pokémon games.
 Currently supports:
 - Pokemon Red (UE) [S][!].gb `sha1: ea9bcae617fdf159b045185467ae58b2e4a48b9a`
 - Pokemon Blue (UE) [S][!].gb `sha1: d7037c83e1ae5b39bde3c30787637ba1d4c48ce2`
-- red-speedchoice-v1.1.gbc `sha1: 2559C19E66787FE0012EFD51055EE5FAB7FEB9DB`
+- Pokemon Yellow (UE) [C][!].gbc `sha1: cc7d03262ebfaf2f06772c1a480c7d9d5f4a38e1`
 - Pokemon - Crystal Version (UE) (V1.0) [C][!].gbc `sha1: F4CD194BDEE0D04CA4EAC29E09B8E4E9D818C133`
+- Pokemon Emerald Version.gba `sha1: f3ae088181bf583e55daf962a92bb46f4f1d07b7`  
+
+As well as the following "speedchoice" ROMs:
+- red-speedchoice-v1.1.gbc `sha1: 2559C19E66787FE0012EFD51055EE5FAB7FEB9DB`
 - crystal-speedchoice-v7.2.gbc `sha1: 19AB11096EB2BA6BF9A8360093B2DDAE3E7ABBAB`
-- pokeemerald.gba `sha1: f3ae088181bf583e55daf962a92bb46f4f1d07b7`
 - pokeemerald-speedchoice-1.2.1.gba `sha1: C65E8F3DC990484CE522A979CDBCF9732A2F5AAB`
 - pokeemerald-ex-speedchoice-0.3.0.gba `sha1: A57527512AA3856C43808BED9E4B2F1FF6FB2FE6`
+
 
 # Type Chart Tracker
 I would suggest using Demki's tracker found here: https://demki.github.io/poketypechart/  

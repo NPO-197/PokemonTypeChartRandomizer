@@ -402,6 +402,8 @@ def TestROM(inputfile):
             mm.seek(offset)
             if mm.read(len(data)) != data:
                 checkflag = False
+                print(RomInfo.ROMID.name,datacheck,"False")
+                break
         if checkflag:
             return RomInfo
 
