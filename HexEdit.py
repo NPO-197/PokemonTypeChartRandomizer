@@ -170,7 +170,6 @@ def SaveChart(inputfile,outputfile,TypeChart,RomInfo,seed):
     SpoilerLog.Spoiler(outputfile[:-4]+'log.csv',TypeChart,seed,RomInfo.NumberOfTypes)
     #Generate the typechart data in the format expected by the ROM
     NewTypeChartData = FormatFunctions.get(RomInfo.typechartformat,None)(TypeChart)
-    print(NewTypeChartData)
     HexEdit(inputfile,outputfile,NewTypeChartData,RomInfo,seed)
 
 
