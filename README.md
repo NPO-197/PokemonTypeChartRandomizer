@@ -4,7 +4,11 @@ Currently supports:
 - Pokemon Red (UE) [S][!].gb `sha1: ea9bcae617fdf159b045185467ae58b2e4a48b9a`
 - Pokemon Blue (UE) [S][!].gb `sha1: d7037c83e1ae5b39bde3c30787637ba1d4c48ce2`
 - Pokemon Yellow (UE) [C][!].gbc `sha1: cc7d03262ebfaf2f06772c1a480c7d9d5f4a38e1`
-- Pokemon - Crystal Version (UE) (V1.0) [C][!].gbc `sha1: F4CD194BDEE0D04CA4EAC29E09B8E4E9D818C133`
+- Pokemon - Gold Version (UE) [C][!].gbc `sha1: d8b8a3600a465308c9953dfa04f0081c05bdcb94`
+- Pokemon - Silver Version (UE) [C][!].gbc `sha1: 49b163f7e57702bc939d642a18f591de55d92dae`
+- Pokemon - Crystal Version (UE) (V1.0) [C][!].gbc `sha1: f4cd194bdee0d04ca4eac29e09b8e4e9d818c133`
+- Pokemon Ruby Version.gba `sha1: f28b6ffc97847e94a6c21a63cacf633ee5c8df1e`
+- Pokemon Sapphire Version.gba `sha1: 3ccbbd45f8553c36463f13b938e833f652b793e4`
 - Pokemon Emerald Version.gba `sha1: f3ae088181bf583e55daf962a92bb46f4f1d07b7`  
 
 As well as the following "speedchoice" ROMs:
@@ -34,7 +38,7 @@ If you would like a completely random type chart (very unbalanced) have each sli
 Click on 'Example=>' to generate an example chart to get a feel for the settings.  
 For a Gen 1 game consider checking "Replace Dragon Rage?" to replace dragon rage with Dragon Breath. (optional)         
 Click on 'Randomize ROM' and specify the seed (or leave blank for a random one)  
-then name the randomized Pokemon ROM, a spoiler log .csv file will be gerenated with the same name.
+then name the randomized Pokemon ROM, a spoiler log .csv file will be generated with the same name.
 
 To make a custom type chart click on the 'edit' check mark box,  
 and use the four buttons on top to modify the current type chart however you wish.  
