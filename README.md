@@ -9,6 +9,8 @@ Currently supports:
 - Pokemon - Crystal Version (UE) (V1.0) [C][!].gbc `sha1: f4cd194bdee0d04ca4eac29e09b8e4e9d818c133`
 - Pokemon Ruby Version.gba `sha1: f28b6ffc97847e94a6c21a63cacf633ee5c8df1e`
 - Pokemon Sapphire Version.gba `sha1: 3ccbbd45f8553c36463f13b938e833f652b793e4`
+- Pokemon - FireRed Version(Rev 1).gba `sha1: dd5945db9b930750cb39d00c84da8571feebf417`
+- Pokemon - LeafGreen Version(Rev 1).gba `sha1: 7862c67bdecbe21d1d69ce082ce34327e1c6ed5e`
 - Pokemon Emerald Version.gba `sha1: f3ae088181bf583e55daf962a92bb46f4f1d07b7`  
 
 As well as the following "speedchoice" ROMs:

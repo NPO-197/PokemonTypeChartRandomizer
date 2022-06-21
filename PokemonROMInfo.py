@@ -18,6 +18,9 @@ class ROMID(Enum):
     Ruby = 9
     Sapphire = 10
     GoldSilver =11
+    FireRed = 12
+    LeafGreen = 13
+
 class TCformat(Enum):
     #2D array Effectivenes format, a custom format that Crystal roms are modifyed to accept.
     MatrixFormatGen2 = 1
@@ -238,6 +241,68 @@ newdata =[
     [0x02237C,bytearray.fromhex('00 00 AF 08')],   #??? (Something in battle_script_command)
     [0x028120,bytearray.fromhex('00 00 AF 08')],   #Used in conversion 2
     [0x036CD0,bytearray.fromhex('00 00 AF 08')],   #AI trainer switch in?
+]
+)
+
+FireRedInfo = RomInfo(ROMID.FireRed,0x1000000,0xAF0000,TCformat.ListFormatGen3,
+checkdata =[
+#Similar to Ruby/Sapphire but the offsets are different
+#Pointers to the original type chart data
+    [0x01E958,bytearray.fromhex('C0 F0 24 08')], #TypeCalc Pointer 1
+    [0x01EA98,bytearray.fromhex('C0 F0 24 08')], #TypeCalc Pointer 2
+    [0x01EB6C,bytearray.fromhex('C0 F0 24 08')], #AI trainer switch out
+    [0x01EED0,bytearray.fromhex('C0 F0 24 08')], #Used in levetate/wonderguard? 1
+    [0x01EFD4,bytearray.fromhex('C0 F0 24 08')], #Used in levetate/wonderguard? 2
+    [0x01F0D4,bytearray.fromhex('C0 F0 24 08')], #"Good" trainer AI
+    [0x023CEC,bytearray.fromhex('C0 F0 24 08')], #??? (Something in battle_script_command)
+    [0x029FA4,bytearray.fromhex('C0 F0 24 08')], #Used in conversion 2
+    [0x039E4C,bytearray.fromhex('C0 F0 24 08')], #AI trainer switch in?
+    #Unused Section of ROM
+    [0xAF0000,bytearray([0xFF]*873)] #We need at most 873 ""empty"" bytes
+],
+newdata = [
+    #There are 9 pointers used by various functions that point to the Old Type Chart
+    #We want to change them to point to the new type chart at 0x08af0000
+    [0x01E958,bytearray.fromhex('00 00 AF 08')], #TypeCalc Pointer 1
+    [0x01EA98,bytearray.fromhex('00 00 AF 08')], #TypeCalc Pointer 2
+    [0x01EB6C,bytearray.fromhex('00 00 AF 08')], #AI trainer switch out
+    [0x01EED0,bytearray.fromhex('00 00 AF 08')], #Used in levetate/wonderguard? 1
+    [0x01EFD4,bytearray.fromhex('00 00 AF 08')], #Used in levetate/wonderguard? 2
+    [0x01F0D4,bytearray.fromhex('00 00 AF 08')], #"Good" trainer AI
+    [0x023CEC,bytearray.fromhex('00 00 AF 08')], #??? (Something in battle_script_command)
+    [0x029FA4,bytearray.fromhex('00 00 AF 08')], #Used in conversion 2
+    [0x039E4C,bytearray.fromhex('00 00 AF 08')], #AI trainer switch in?
+]
+)
+
+LeafGreenInfo = RomInfo(ROMID.LeafGreen,0x1000000,0xAF0000,TCformat.ListFormatGen3,
+checkdata =[
+#Same as FireRed but the original type chart is in a slightly different location
+#Pointers to the original type chart data
+    [0x01E958,bytearray.fromhex('9C F0 24 08')], #TypeCalc Pointer 1
+    [0x01EA98,bytearray.fromhex('9C F0 24 08')], #TypeCalc Pointer 2
+    [0x01EB6C,bytearray.fromhex('9C F0 24 08')], #AI trainer switch out
+    [0x01EED0,bytearray.fromhex('9C F0 24 08')], #Used in levetate/wonderguard? 1
+    [0x01EFD4,bytearray.fromhex('9C F0 24 08')], #Used in levetate/wonderguard? 2
+    [0x01F0D4,bytearray.fromhex('9C F0 24 08')], #"Good" trainer AI
+    [0x023CEC,bytearray.fromhex('9C F0 24 08')], #??? (Something in battle_script_command)
+    [0x029FA4,bytearray.fromhex('9C F0 24 08')], #Used in conversion 2
+    [0x039E4C,bytearray.fromhex('9C F0 24 08')], #AI trainer switch in?
+    #Unused Section of ROM
+    [0xAF0000,bytearray([0xFF]*873)] #We need at most 873 ""empty"" bytes
+],
+newdata = [
+    #There are 9 pointers used by various functions that point to the Old Type Chart
+    #We want to change them to point to the new type chart at 0x08af0000
+    [0x01E958,bytearray.fromhex('00 00 AF 08')], #TypeCalc Pointer 1
+    [0x01EA98,bytearray.fromhex('00 00 AF 08')], #TypeCalc Pointer 2
+    [0x01EB6C,bytearray.fromhex('00 00 AF 08')], #AI trainer switch out
+    [0x01EED0,bytearray.fromhex('00 00 AF 08')], #Used in levetate/wonderguard? 1
+    [0x01EFD4,bytearray.fromhex('00 00 AF 08')], #Used in levetate/wonderguard? 2
+    [0x01F0D4,bytearray.fromhex('00 00 AF 08')], #"Good" trainer AI
+    [0x023CEC,bytearray.fromhex('00 00 AF 08')], #??? (Something in battle_script_command)
+    [0x029FA4,bytearray.fromhex('00 00 AF 08')], #Used in conversion 2
+    [0x039E4C,bytearray.fromhex('00 00 AF 08')], #AI trainer switch in?
 ]
 )
 
