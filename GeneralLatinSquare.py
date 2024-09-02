@@ -4,7 +4,9 @@ Python code to generate a General Latin Square, implementation by NPO-197
 from random import choice, shuffle
 from copy import deepcopy
 
-#function to generate a random latin square (might want to replace with the jacobson-matthews method)
+#function to generate a random latin square
+#TODO: replace this with an implementation of the jacobson Mathewes method 
+# (to make the randomizer slightly more random *in theory*)
 def rls(n):
     if n <= 0:
         return []

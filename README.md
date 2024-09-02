@@ -17,8 +17,12 @@ As well as the following "speedchoice" ROMs:
 - red-speedchoice-v1.1.gbc `sha1: 2559C19E66787FE0012EFD51055EE5FAB7FEB9DB`
 - crystal-speedchoice-v7.2.gbc `sha1: 19AB11096EB2BA6BF9A8360093B2DDAE3E7ABBAB`
 - pokeemerald-speedchoice-1.2.1.gba `sha1: C65E8F3DC990484CE522A979CDBCF9732A2F5AAB`
-- pokeemerald-ex-speedchoice-0.3.0.gba `sha1: A57527512AA3856C43808BED9E4B2F1FF6FB2FE6`
+- pokeemerald-ex-speedchoice-0.4.0.gba `sha1: 59D4230F0F795F76EE7F344376FD19DA46BC9C02`
 
+Currently Dose NOT support:
+- older versions of "speedchoice" roms
+- non-english versions of pokemon
+- pokemon games after gen 3
 
 # Type Chart Tracker
 I would suggest using Demki's tracker found here: https://demki.github.io/poketypechart/  
